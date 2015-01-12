@@ -591,14 +591,46 @@ d# 128 buffer: file$
 
 [ifndef] inject-key  ( keyname$ -- )
 : inject-key  ( keyname$ -- )
-
+   2dup find-key-file  if            ( keyname$ value$ )
+      2over ram-find-tag  if         ( keyname$ value$ oldvalue$ )
+         2 pick <>  if               ( keyname$ value$ oldvalue$ )
+            3drop                    ( keyname$ )
+            ." Warning: inconsistent old tag length for " type cr   ( )
+            exit
+         then                        ( keyname$ value$ oldvalue-adr )
+         >r 2tuck  r> swap  move     ( valu$ keyname$ )
+         green-letters
+         ." Replaced " type cr       ( value$ )
+         black-letters
+      else                           ( keyname$ value$ )
+         2swap                       ( value$ keyname$ )
+         2over 2over                 ( value$ keyname$ value$ keyname$ )
+         ($add-tag)                  ( value$ keyname$ )
+         green-letters
+         ." Added " type cr          ( value$ )
+         black-letters
+      then                           ( value$ )
+      free-mem                       ( )
+   else                              ( value$ )
+      red-letters cr ." Warning: Please obtain the required key for " type cr  ( )
+      black-letters cr ." Remove Battery and AC to reset " cr  ( )
+      do-wait                        ( )
+      leave                          ( )
+      exit                           ( )
+   then                              ( )
 ;
 
 [then]
 
 [ifndef] inject-keys  ( -- )
 : inject-keys  ( -- )
-   
+   get-mfg-data
+   new-key-list$  begin  dup  while  ( $ )
+      bl left-parse-string           ( $' name$ )
+      inject-key                     ( $ )
+   repeat                            ( $ )
+   2drop                             ( )
+   (put-mfg-data)                    ( )   
 ;
 
 [then]
