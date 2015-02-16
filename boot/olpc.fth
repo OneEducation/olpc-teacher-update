@@ -7,8 +7,7 @@ purpose: Inject additional keys into manufacturing data in the field
 : new-key-list$  ( -- )  " o2 s2 w2"  ;
 
 \ Different versions of software.
-: teacher$  " u:\teacher.zd"  ;
-: student$  " u:\student.zd"  ;
+: path$  " u:\fs4.zd"  ;
 
 \ for debugging
 \ visible
@@ -850,14 +849,14 @@ visible
 green-letters
 page
 ."  " cr cr cr cr cr cr cr cr cr cr cr
-."                       XO-system 2 (Android Beta) Update " cr
+."                               XO-system 2 Update " cr
 ."                                 Please Wait... " cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr
 2000 MS
 bat-safe? if
 is-compatible? if
 \ Warn the user before they delete everything
 page
-."   XO-system 2 Update (Android Beta) " cr
+."   XO-system 2 Update " cr
 ."  =============================================================================" cr
 ." " cr
 ."                               .----------------.  " cr
@@ -887,32 +886,10 @@ page
  
 \ Wait for user confirmation before starting
 begin  key  [char] y  =  until
+path$ $fs-update
 page
 then
 then
-."   Please select which edition you wish to install. " cr
-."  =============================================================================" cr
-." " cr
-." " cr
-." Press 1 for:" cr
-."    Student Edition (No Play Store)" cr
-." " cr
-." " cr
-." Press 2 for:" cr
-."    Unlocked Edition (Play Store for Teachers/Adults)" cr
-." " cr
-." " cr
-." " cr
-." " cr
-." " cr
-key case
-  [char] 1 of
-    student$ $fs-update
-  endof
-  [char] 2 of
-    teacher$ $fs-update
-  endof
-endcase 
 page
  
 \ Let the user know the process is complete
