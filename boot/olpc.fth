@@ -851,7 +851,7 @@ page
 ."  " cr cr cr cr cr cr cr cr cr cr cr
 ."                               XO-system 2 Update " cr
 ."                                 Please Wait... " cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr
-2000 MS
+1000 MS
 bat-safe? if
 is-compatible? if
 \ Warn the user before they delete everything
@@ -872,45 +872,49 @@ page
 ."                               '----------------'  " cr
 ."                                                   " cr 
 ."                                                   " cr 
+red-letters
 ."  WARNING: Updating this OS (Operating System) image will erase all data on " cr
 ."  this XO. Please ensure you back-up any important files before proceeding. " cr
 ."  It is also recommended you connect your charger for this update." cr cr
- 
-."  If you do not wish to update your XO OS image right now you should: " cr
-."   1.  Remove the USB stick from the XO device." cr
-."   2.  Hold down the power button until the XO device turns off." cr
-."   3.  Press the power button to restart your device." cr cr
- 
+."  If you do not wish to update your XO OS image right now, press the 'n' key." cr cr
+green-letters
 ."  The OS image update process should take no more than 5 minutes to complete." cr
-."  If you still wish to proceed, please press the 'y' key." cr cr cr
+."  If you still wish to proceed, please press the 'y' key." cr cr cr cr cr cr
+white-letters
  
 \ Wait for user confirmation before starting
-begin  key  [char] y  =  until
-path$ $fs-update
+begin
+key case
+  [char] y of
+  	green-letters
+    path$ $fs-update
+    page
+    ."  " cr cr cr cr cr cr cr cr cr cr cr
+	."                                Update Complete! " cr
+	."       It is now safe to remove your usb drive. Press any key to continue. " cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr
+	white-letters
+	key
+	"  /sd/sdhci@d4281000/disk:\boot\olpc.fth" to boot-device
+ 	boot
+  endof
+  [char] n of
+    page
+  	red-letters
+	."  " cr cr cr cr cr cr cr cr cr cr cr
+	."                                Update Aborted " cr
+	."                    Loading your current operating system... " cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr cr
+	white-letters
+	1000 MS
+	"  /sd/sdhci@d4281000/disk:\boot\olpc.fth" to boot-device
+ 	boot
+  endof
+endcase
+again
 page
 then
 then
 page
- 
-\ Let the user know the process is complete
-."   System Update: Update Complete! " cr
-."  =============================================================================" cr
-."                                                                            " cr
-."                                                            _____           " cr
-."   Your XO was successfully updated!                     .-'     '-.        " cr
-."                                                       .'           `.      " cr
-."                                                      /   .      .    \     " cr
-."    To start using your device, you should:          :                 :    " cr
-."     1. Remove the USB stick from the XO device.     |                 |    " cr
-."     2. Hold down the power button until the XO      :   \        /    :    " cr
-."        device is completely turned off.              \   `.____.'    /     " cr
-."     3. Press the power button to restart the device.  `.           .'      " cr
-."     4. Be patient. First start up can take upwards of   `-._____.-'        " cr
-."        5 minutes. This is normal.                                          " cr
-."                                                                            " cr 
-."                                                                            " cr 
-."  " cr
-begin halt again
+key
 ;
 [then]
 
