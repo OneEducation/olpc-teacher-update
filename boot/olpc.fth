@@ -879,7 +879,9 @@ red-letters
 ."  If you do not wish to update your XO OS image right now, press the 'n' key." cr cr
 green-letters
 ."  The OS image update process should take no more than 5 minutes to complete." cr
-."  If you still wish to proceed, please press the 'y' key." cr cr cr cr cr cr
+."  If you still wish to proceed, please press the 'y' key." cr cr
+."  To begin the hardware test press the 't' key." cr
+."  To exit the hardware test you will need to hold down the power button.`" cr cr cr
 white-letters
  
 \ Wait for user confirmation before starting
@@ -907,6 +909,9 @@ key case
 	1000 MS
 	"  /sd/sdhci@d4281000/disk:\boot\olpc.fth" to boot-device
  	boot
+  endof
+  [char] t of
+    menu
   endof
 endcase
 again
